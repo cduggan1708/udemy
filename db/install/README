@@ -1,0 +1,36 @@
+-- Directions to install MySQL DB for Udemy project
+-- Execute the following SQL commands.  Note I didn't create .sql files b/c I'm on a Windows computer and concerned about formatting (I'm used to Linux).
+
+DROP DATABASE IF EXISTS `udemy_automation`;
+CREATE DATABASE `udemy_automation` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `udemy_automation`.`users`;
+CREATE TABLE `udemy_automation`.`users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(40) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT '0000-00-00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- because the specs don't specify what user data to store, a generic table that is flexible is appropriate
+
+DROP TABLE IF EXISTS `udemy_automation`.`user_metadata`;
+CREATE TABLE `udemy_automation`.`user_metadata` (
+  `user_id` int(10) unsigned NOT NULL,
+  `property` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  KEY `fk_user_id_entry` (`user_id`),
+  CONSTRAINT `fk_user_id_metadata` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `udemy_automation`.`user_hobbies`;
+CREATE TABLE `udemy_automation`.`user_hobbies` (
+  `user_id` int(10) unsigned NOT NULL,
+  `hobby` varchar(255) NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT '0000-00-00',
+  KEY `fk_user_id_entry` (`user_id`),
+  CONSTRAINT `fk_user_id_hobbies` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  UNIQUE KEY `hobby` (`hobby`,`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
