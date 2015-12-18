@@ -9,9 +9,20 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') { // a lot of this isn't needed for POS
 <!DOCTYPE html>
 <html lang=en>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Udemy Automation Course Companion Site</title>
 <link rel="stylesheet" href="css/main.css" media="screen" type="text/css" />
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="css/jumbotron-narrow.css" rel="stylesheet">
 
 <style type="text/css" media="screen">
 #hobby {display: none;}
@@ -69,8 +80,7 @@ function addHobby(){
 </head>
 
 <body>
-
-  <header>
+  <header class="navbar navbar-default navbar-static-top">
         <h1>Udemy Automation Course Companion Site</h1>
         <div id="right">
 <?php
@@ -90,7 +100,8 @@ function addHobby(){
      </div>
      <span class="clear"></span>
   </header>
-  <article class="one" id="id1">
+  <div class="container">
+  <article class="jumbotron">
     <h2>Hobbies</h2>
     <ul id="hobby_item"></ul> <!-- filled programmatically -->
 
@@ -115,8 +126,8 @@ function addHobby(){
   <footer>
     <p><a href="faq.php" target="_blank">FAQ</a></p>
   </footer>
-
-  </body>
+</div>
+</body>
 </html>
 <?php
 }
@@ -153,7 +164,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
           foreach ($rows as $row) {
             echo ('
             <script type="text/javascript">
-              document.getElementById("hobby_item").innerHTML += "<li>" + "'.$row->hobby.'" + "</li>";
+              document.getElementById("hobby_item").innerHTML += "<li>" + "'.addslashes($row->hobby).'" + "</li>";
             </script>
             ');
           }
@@ -163,8 +174,8 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 if (isset($_POST['hobby'])) { // adding a new hobby functionality (called from AJAX request)
-  if(!empty($_POST['hobby'])) {
-    $hobby = $_POST['hobby'];
+  $hobby = trim($_POST['hobby']);
+  if(!empty($hobby)) {
 
     try {
         $db_host = $config_data['db_host'];
@@ -185,6 +196,9 @@ if (isset($_POST['hobby'])) { // adding a new hobby functionality (called from A
     }
 
     exit($hobby);
+  }
+  else {
+    exit("failed");
   }
 }
 

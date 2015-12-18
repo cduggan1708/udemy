@@ -10,14 +10,25 @@ session_start();
 <!DOCTYPE html>
 <html lang=en>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Udemy Automation Course Companion Site</title>
 <link rel="stylesheet" href="css/main.css" media="screen" type="text/css" />
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="css/signin.css" rel="stylesheet">
 
 <style type="text/css" media="screen">
 
 div.required {font-weight: 800;}
-li#p_error {color: #CD4F39; width: 80%; padding-left: 0.5em; display: none;}
+li#p_error {color: #CD4F39; display: none;}
 label {float: left; width: 115px; text-align: right; padding-right: 2px;}
 div {padding-top: 2px;}
 input {margin-bottom: 5px;}
@@ -28,9 +39,6 @@ div.note {color:black; font-size:.85em;}
 #pwd_info:hover + #pwd_msg {display: inline;}
 .input {font-weight:bold;}
 .texterror {font-weight:bold; color:red; font-size:1.15em;}
-.error {background:yellow;}
-h2#heading {margin-left: 100px;}
-h3#login {margin-left: 100px;}
 
 </style>
 
@@ -38,8 +46,6 @@ h3#login {margin-left: 100px;}
 <!--
 /*variables*/
 
-var fName;
-var lName;
 var username;
 var password;
 var confirmPW;
@@ -60,57 +66,29 @@ function validate(){
 	var p_error_handle = document.getElementById("p_error");
 	
 
-	if(isEmpty(getFirstName())){
-		strMsg += "<li>Enter first name.</li>";
-		document.getElementById("fname").style.background = "yellow";
-		counter = 1;
-	}
-	else if(!isLetter(fName)){
-		strMsg += "<li>First name must contain only letters.</li>";
- 		document.getElementById("fname").style.background = "yellow";
-		counter = 1;
-	}		
-	if(isEmpty(getLastName())){
-		strMsg += "<li>Enter last name.</li>";
-		document.getElementById("lname").style.background = "yellow";
-		if (counter == 0)
-			counter = 2;
-	}
-	else if(!isLetter(lName)){
-		strMsg += "<li>Last name must contain only letters.</li>";
-		document.getElementById("lname").style.background = "yellow";
-		if (counter == 0)
-			counter = 2;
-	}	
 	if(isEmpty(getUsername())){
 		strMsg += "<li>Enter username.</li>";
-		document.getElementById("username").style.background = "yellow";
 		counter = 3;
-	}			
+	}
+	else if ((getUsername().length > 20) || (getUsername().length < 6)){
+		strMsg += "<li>Username must have 6 to 20 characters.</li>";
+		counter = 5;
+	}	
+			
 	if(isEmpty(getPassword())){
 		strMsg += "<li>Enter password.</li>";
-		document.getElementById("password").style.background = "yellow";
 		counter = 4;
 	}	
-	else if ((password.length > 20) && (password.length < 6)){
+	else if ((getPassword().length > 20) || (getPassword().length < 6)){
 		strMsg += "<li>Password must have 6 to 20 characters.</li>";
-		document.getElementById("password").style.background = "yellow";
 		counter = 4;
 	}
 	if(isEmpty(getConfirmPW())){
 		strMsg += "<li>Confirm password.</li>";
-		document.getElementById("confirmPW").style.background = "yellow";
 		counter = 5;
 	}			
-	else if ((confirmPW.length > 20) && (confirmPW.length < 6)){
-		strMsg += "<li>Password must have 6 to 20 characters.</li>";
-		document.getElementById("confirmPW").style.background = "yellow";
-		counter = 5;
-	}	
-	if(getPassword() != getConfirmPW()){
+	else if(getPassword() != getConfirmPW()){
 		strMsg += "<li>Password and Confirmation must match.</li>";
-		document.getElementById("password").style.background = "yellow";
-		document.getElementById("confirmPW").style.background = "yellow";
 		counter = 4;
 	}	
 
@@ -124,12 +102,6 @@ function validate(){
 			break;
 		case 3:
 			document.getElementById("username").focus();
-			break;	
-		case 2:
-			document.getElementById("lName").focus();
-			break;	
-		case 1:
-			document.getElementById("fName").focus();
 			break;	
 	} /*end switch*/
 		
@@ -145,16 +117,6 @@ function validate(){
 } /*end validate*/		
 
 /*get functions return the value that the user input*/
-
-function getFirstName(){
-	fName = document.getElementById("fname").value;
-	return fName;
-}	
-
-function getLastName(){
-	lName = document.getElementById("lname").value;
- 	return lName;
-}
 
 function getUsername(){
 	username = document.getElementById("username").value;
@@ -195,6 +157,7 @@ function getGender(){
 
 /*function to check for empty string*/
 function isEmpty(string){
+	string = string.replace(/ /g,'')
 	return (string=="");
 }
 
@@ -224,9 +187,7 @@ function isLetter(input){
   
   
   
-<div class="content">
-
-<h2 id="heading">Register</h2>
+<div class="container">
 
   <?php
   $config_data = parse_ini_file("config.ini");
@@ -293,43 +254,33 @@ $num_errors=0;
 
 $error = array();
 
-if ($someList['fname']==''){
-	echo '<p class="texterror">Enter First Name.</p>';
-	$error['fname'] = 1;
-	$num_errors++;
-}
-if ($someList['lname']==''){
-	echo '<p class="texterror">Enter Last Name.</p>';
-	$error['lname'] = 1;
-	$num_errors++;
-}
 if ($someList['username']==''){
-	echo '<p class="texterror">Enter Username.</p>';
+	//echo '<p class="texterror">Enter Username.</p>';
 	$error['username'] = 1;
 	$num_errors++;
 }
 if ((strlen($someList['username']) < 6) || (strlen($someList['username']) > 20)){
-	echo '<p class="texterror">Username must be between 6 and 20 characters long.</p>';
+	//echo '<p class="texterror">Username must be between 6 and 20 characters long.</p>';
 	$error['username'] = 1;
 	$num_errors++;
 } 
 if ($someList['password']==''){
-	echo '<p class="texterror">Enter Password.</p>';
+	//echo '<p class="texterror">Enter Password.</p>';
 	$error['password'] = 1;
 	$num_errors++;
 }
 if ((strlen($someList['password']) < 6) || (strlen($someList['password']) > 20)){
-	echo '<p class="texterror">Password must be between 6 and 20 characters long.</p>';
+	//echo '<p class="texterror">Password must be between 6 and 20 characters long.</p>';
 	$error['password'] = 1;
 	$num_errors++;
 } 
 if ($someList['confirmPW']==''){
-	echo '<p class="texterror">Enter Password Confirmation.</p>';
+	//echo '<p class="texterror">Enter Password Confirmation.</p>';
 	$error['confirmPW'] = 1;
 	$num_errors++;	
 }
 if ($someList['password'] != $someList['confirmPW']){
-	echo '<p class="texterror">Password and Confirmation must match.</p>';
+	//echo '<p class="texterror">Password and Confirmation must match.</p>';
 	$error['password'] = 1;
 	$error['confirmPW'] =1;
 	$num_errors++;
@@ -343,47 +294,24 @@ if ($someList['password'] != $someList['confirmPW']){
 
 function print_form($list,$error){
 
+$username = $list['username'];
+$password = $list['password'];
+$confirm_password = $list['confirmPW'];
 
+echo <<<FORM
 
-	print ('
+	<form class="form-signin" method="post" action ="register.php">
+	<h2 id="heading" class="form-signin-heading">Register</h2>
 	<ul><li id="p_error"></li></ul>
-		<form method="post" action ="register.php">
-<div class="input">First name:<br />');
-if(!$error['fname'])
-	print('<input type="text" name="fname" id="fname" size="60" value="'.$list['fname'].'" /></div>');
-else
-	print('<input type="text" class="error" name="fname" id="fname" size="60" value="'.$list['fname'].'" /></div>');
-print('
-<div class="input">Last name:<br />');
-if(!$error['lname'])
-	print('<input type="text" name="lname" id="lname" size="60" value="'.$list['lname'].'" /></div>');
-else
-	print('<input type="text" class="error" name="lname" id="lname" size="60" value="'.$list['lname'].'" /></div>');	
-print ('
-<span class="input">Username: <br />');
-if(!$error['username'])
-	print('<input type="text" name="username" id="username" size="20" value="'.$list['username'].'" /></span>');
-else
-	print('<input type="text" class="error" name="username" id="username" size="20" value="'.$list['username'].'" /></span>');
-print('<span id="un_info">&#9432;</span><div class="note" id="un_msg">Username must be between 6 and 20 characters.</div><br />');		
-print ('
-<span class="input">Password: <br />');
-if(!$error['password'])
-	print('<input type="password" name="password" id="password" size="20" value="'.$list['password'].'"/></span>');
-else
-	print('<input type="password" class="error" name="password" id="password" size="20" value="'.$list['password'].'"/></span>');
-print('<span id="pwd_info">&#9432;</span><div class="note" id="pwd_msg">Password must be between 6 and 20 characters.</div>');	
-print('		
-<div class="input">Confirm Password:<br />');
-if(!$error['confirmPW'])
-	print('<input type="password" name="confirmPW" id="confirmPW" size="20" value="'.$list['confirmPW'].'"/></div>');
-else
-	print('<input type="password" class="error" name="confirmPW" id="confirmPW" size="20" value="'.$list['confirmPW'].'"/></div>');	
-print('		
-<div class="input">Date of Birth (mm/dd/yyyy):<br />');
-print ('
-<select name="month" id="month">
-');
+	<span id="un_info">&#9432;</span><div class="note" id="un_msg">Username must be between 6 and 20 characters.</div><br />
+	<input type="text" name="username" id="username" size="20" value="$username" class="form-control" placeholder="Username" autofocus/></span>
+	<span id="pwd_info">&#9432;</span><div class="note" id="pwd_msg">Password must be between 6 and 20 characters.</div><br />
+	<input type="password" name="password" id="password" size="20" value="$password"/ class="form-control" placeholder="Password"></span>
+	<input type="password" name="confirmPW" id="confirmPW" size="20" value="$confirm_password" class="form-control" placeholder="Confirm Password"></span>
+	<div class="input">Date of Birth (mm/dd/yyyy):<br />
+	<select name="month" id="month">
+
+FORM;
 
 	for ($startMonth = 1; $startMonth <= 12; $startMonth++)
 	{
@@ -395,9 +323,6 @@ print ('
 	}
 print ('	
 </select>
-');
-
-print ('
 <select name="day" id="day">');
 
 	for($startDay = 1; $startDay <= 31; $startDay++)
@@ -410,11 +335,8 @@ print ('
 	}
 
 print ('
-</select>');
-
-print('
-
-	<select name="year" id="year">						
+</select>
+<select name="year" id="year">						
 ');
 	for($startYear = date('Y'); $startYear >= 1915; $startYear--)
 	{
@@ -440,18 +362,17 @@ foreach ($gender as $key)
 		else
 			print('<option value="'.$key.'">'.$key.'</option>');	
 	}
-print ('</select></div>');		
 
-print('	
-<br /><br />
+echo <<<FORM
 
-<input type="submit" name="submit" value="Register" id="submit" onclick="return validate();" />
+</select></div><br /><br />
+
+<input type="submit" name="submit" value="Register" id="submit" onclick="return validate();" class="btn btn-lg btn-primary btn-block" />
 </form>
+<h3 id="login">Click <a href="login.php">here</a> to go back to log in page.</h3>	
+</div>
 
-<br /><br />		
-		
-<h3 id="login">Click <a href="login.php">here</a> to go back to log in page.</h3>		
-		');
+FORM;
 } //end print_form
 
 ?>

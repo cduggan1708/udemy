@@ -7,9 +7,20 @@ session_start();
 <!DOCTYPE html>
 <html lang=en>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Udemy Automation Course Companion Site</title>
 <link rel="stylesheet" href="css/main.css" media="screen" type="text/css" />
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="css/signin.css" rel="stylesheet">
 </head>
 
 <body>
@@ -86,22 +97,18 @@ if ((isset($_POST['username'])) && (isset($_POST['password']))) {
       }
 
       if(!empty($_COOKIE['failed'])) {
-             echo '<br /><div class="note">Login failed.</div><br />';
+             echo '<br /><h3 class="container note">Login failed.</h3><br />';
       }
-      echo '<form method="post" action="">';
+      echo '<div class="container"><form class="form-signin" method="post" action="">';
       echo ('
- 
-       <p style="font-weight: bold; font-size: 1.5em;">Log in or <a href="register.php">register</a>.</p>
+       <h2 class="form-signin-heading">Log in or <a href="register.php">register</a></h2>
        
-       <table>
-       <tr><td>Username:</td>
-       <td><input type="text" name="username" id="username" value="'.$un.'"/></td></tr>
-       <tr><td>Password:</td>
-       <td><input type="password" name="password" id="password"/></td></tr>
-       <tr><td><input type="checkbox" name="remember" id="remember" '.$checked.'>Remember Me</td></tr>
-       <tr><td colspan="2" align="center"><input type="submit" value="Log in" id="submit"/></td></tr>
-       </table>
+       <input type="text" name="username" id="username" value="'.$un.'" class="form-control" placeholder="Username" autofocus/>
+       <input type="password" name="password" id="password" class="form-control" placeholder="Password"/>
+       <div><input type="checkbox" name="remember" id="remember" '.$checked.'>Remember Me</div>
+       <input type="submit" value="Log in" id="submit" class="btn btn-lg btn-primary btn-block"/>
        </form>
+       </div>
        
        ');
 

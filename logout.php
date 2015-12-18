@@ -10,6 +10,7 @@ session_start();
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Udemy Automation Course Companion Site</title>
 <link rel="stylesheet" href="css/main.css" media="screen" type="text/css" />
+<link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>

@@ -1,5 +1,5 @@
 form {margin-left: 100px;}
-div.note {color: red; font-size: 1.15em;}
+.note {color: red;}
 
 header, nav, footer, article 
 {
@@ -8,21 +8,15 @@ header, nav, footer, article
 header
 {
 	text-align: center;
-	border-bottom:2px solid black;
-}
-h1, h2, h3, #hobby_btn
-{
-	padding-left: 10px;
-}
-article 
-{
-	float:left; 
-	width:95%; 
 }
 footer 
 {
-	border-top:2px solid black;
 	clear:both;
+}
+ul
+{
+	list-style-type: none;
+	-webkit-padding-start: 0px;
 }
 #right
 {
