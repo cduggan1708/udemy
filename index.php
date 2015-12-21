@@ -2,13 +2,12 @@
 
 require('vendor/autoload.php');
 
-// use Monolog\Logger;
-// use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
-// $log = new Logger('name');
-// $log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
+$log = new Logger('name');
+$log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
 	
-
 ?>
 
 <!DOCTYPE html>
