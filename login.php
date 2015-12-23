@@ -75,6 +75,7 @@ if ((isset($_POST['username'])) && (isset($_POST['password']))) {
       }
       catch(PDOException $e) {
           echo 'ERROR: ' . $e->getMessage();
+          exit($e->getMessage());
       }
 
       if(isset($row) && $row != null) {
