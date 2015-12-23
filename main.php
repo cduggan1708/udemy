@@ -135,14 +135,20 @@ function addHobby(){
 // connect to database
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
-        $db_host = $config_data['db_host'];
-        $db = $config_data['db'];
-        $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
-        // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
+        // $db_host = $config_data['db_host'];
+        // $db = $config_data['db'];
+        // $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
+        // // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
+        // $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
+        $dbopts = parse_url(getenv('DATABASE_URL'));
+        $db_host = $dbopts['host'];
+        $db = ltrim($dbopts['path'],'/');
+        $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $dbopts['user'], $dbopts['pass']);
         $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
         // get user id
-        $ps = $connection->prepare("SELECT id FROM udemy_automation.users where username=:username");
+        $ps = $connection->prepare("SELECT id FROM users where username=:username");
         $ps->setFetchMode(PDO::FETCH_OBJ);
         $ps->bindParam(':username', $_SESSION['valid_user']);
         $ps->execute();
@@ -152,7 +158,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         // get existing hobbies to display
-        $ps = $connection->prepare("SELECT hobby FROM udemy_automation.user_hobbies where user_id=:userid");
+        $ps = $connection->prepare("SELECT hobby FROM user_hobbies where user_id=:userid");
         $ps->setFetchMode(PDO::FETCH_OBJ);
         $ps->bindParam(':userid', $_SESSION['user_id']);
         $ps->execute();
@@ -179,14 +185,21 @@ if (isset($_POST['hobby'])) { // adding a new hobby functionality (called from A
   if(!empty($hobby)) {
 
     try {
-        $db_host = $config_data['db_host'];
-        $db = $config_data['db'];
-        $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
-        // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
+        // $db_host = $config_data['db_host'];
+        // $db = $config_data['db'];
+        // $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
+        // // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
+        // $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
+
+        $dbopts = parse_url(getenv('DATABASE_URL'));
+        $db_host = $dbopts['host'];
+        $db = ltrim($dbopts['path'],'/');
+        $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $dbopts['user'], $dbopts['pass']);
         $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
         // save hobby
-        $ps = $connection->prepare("INSERT INTO udemy_automation.user_hobbies VALUES (:userid, :hobby, :create_date)");
+        $ps = $connection->prepare("INSERT INTO user_hobbies VALUES (:userid, :hobby, :create_date)");
         $ps->bindParam(':userid', $_SESSION['user_id']);
         $ps->bindParam(':hobby', $hobby);
         $date = date("Y-m-d H:i:s");

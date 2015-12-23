@@ -61,7 +61,6 @@ if ((isset($_POST['username'])) && (isset($_POST['password']))) {
 
           $dbopts = parse_url(getenv('DATABASE_URL'));
           $db_host = $dbopts['host'];
-          print_r($dbopts);
           $db = ltrim($dbopts['path'],'/');
           $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $dbopts['user'], $dbopts['pass']);
           $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
