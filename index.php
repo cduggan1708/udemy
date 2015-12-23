@@ -7,6 +7,9 @@ use Monolog\Handler\StreamHandler;
 
 $log = new Logger('name');
 $log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
+
+$dbopts = parse_url(getenv('DATABASE_URL'));
+print($dbopts);
 	
 ?>
 
