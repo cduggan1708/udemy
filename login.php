@@ -55,10 +55,11 @@ if ((isset($_POST['username'])) && (isset($_POST['password']))) {
       try {
           $db_host = $config_data['db_host'];
           $db = $config_data['db'];
-          $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
+          $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
+          // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
           $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
-          $ps = $connection->prepare("SELECT `username`, `password` FROM users where `username`=:username and `password`=:password");
+          $ps = $connection->prepare("SELECT username, password FROM udemy_automation.users where username=:username and password=:password");
           $ps->setFetchMode(PDO::FETCH_OBJ);
           $ps->bindParam(':username', $username);
           $ps->bindParam(':password', $password);

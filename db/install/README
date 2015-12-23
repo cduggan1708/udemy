@@ -1,8 +1,10 @@
 -- Directions to install MySQL DB for Udemy project
 -- Execute the following SQL commands.  Note I didn't create .sql files b/c I'm on a Windows computer and concerned about formatting (I'm used to Linux).
 
+-- MYSQL --
+
 DROP DATABASE IF EXISTS `udemy_automation`;
-CREATE DATABASE `udemy_automation` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE DATABASE `udemy_automation` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; // mysql
 
 DROP TABLE IF EXISTS `udemy_automation`.`users`;
 CREATE TABLE `udemy_automation`.`users` (
@@ -34,3 +36,47 @@ CREATE TABLE `udemy_automation`.`user_hobbies` (
   CONSTRAINT `fk_user_id_hobbies` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   UNIQUE KEY `hobby` (`hobby`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- POSTGRESQL --
+
+CREATE USER spike WITH password '<password from config.ini>'
+
+CREATE DATABASE udemy_automation
+  WITH OWNER = spike
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'English_United States.1252'
+       LC_CTYPE = 'English_United States.1252'
+       CONNECTION LIMIT = -1;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id SERIAL NOT NULL,
+  username varchar(40) NOT NULL UNIQUE,
+  password varchar(40) NOT NULL,
+  create_date timestamp DEFAULT current_timestamp,
+  CONSTRAINT user_id PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS user_metadata;
+CREATE TABLE user_metadata (
+  user_id integer NOT NULL,
+  property varchar(255) NOT NULL,
+  value varchar(255) NOT NULL,
+  CONSTRAINT fk_user_id_metadata FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS user_hobbies;
+CREATE TABLE user_hobbies (
+  user_id integer NOT NULL,
+  hobby varchar(255) NOT NULL,
+  create_date timestamp DEFAULT current_timestamp,
+  CONSTRAINT fk_user_id_hobbies FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE,
+  CONSTRAINT hobby UNIQUE (hobby,user_id)
+);
+
+-- in php.ini must uncomment lines with:
+--extension=php_pgsql.dll (windows)
+--extension=php_pgsql.so (linux)
+-- and the pdo equivalents
