@@ -207,7 +207,6 @@ if (isset($_POST['hobby'])) { // adding a new hobby functionality (called from A
         $ps->execute();
     }
     catch(PDOException $e) {
-        echo 'ERROR: ' . $e->getMessage();
         exit("failed");
     }
 

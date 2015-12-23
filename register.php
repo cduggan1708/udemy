@@ -224,8 +224,7 @@ function isLetter(input){
 		          $ps->execute();
 		    }
 		    catch(PDOException $e) {
-		    	  // todo move to logging
-		          echo 'ERROR: ' . $e->getMessage();
+		    	  // todo log
 		    }
 
 		    $_SESSION['valid_user'] = $username;

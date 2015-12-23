@@ -73,7 +73,7 @@ if ((isset($_POST['username'])) && (isset($_POST['password']))) {
           $row = $ps->fetch();
       }
       catch(PDOException $e) {
-          echo 'ERROR: ' . $e->getMessage();
+          // todo log
       }
 
       if(isset($row) && $row != null) {
