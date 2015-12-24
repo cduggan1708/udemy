@@ -13,7 +13,7 @@ $log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
 <!DOCTYPE html>
 <html lang=en>
   <head>
-    <meta http-equiv="Refresh" content="0; url=login.php">
+    <meta http-equiv="Refresh" content="0; url=landing.php">
   </head>
   <body>
   </body>
