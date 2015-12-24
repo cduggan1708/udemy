@@ -204,17 +204,22 @@ function isLetter(input){
 			// connect to db
 
 			try {
-				  // $db_host = $config_data['db_host'];
-		    //       $db = $config_data['db'];
-		    //       $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
-	        //  	  // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
-		    //       $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-
-				  $dbopts = parse_url(getenv('DATABASE_URL'));
-		          $db_host = $dbopts['host'];
-		          $db = ltrim($dbopts['path'],'/');
-		          $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $dbopts['user'], $dbopts['pass']);
-		          $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+				 // check for local
+		        if(isset($config_data['env']) && $config_data['env'] == 'local') {
+		            $db_host = $config_data['db_host'];
+		            $db = $config_data['db'];
+		            $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $config_data['db_user'], $config_data['db_pwd']);
+		            // $connection = new PDO("mysql:host=$db_host;dbname=$db;charset=utf8", $config_data['db_user'], $config_data['db_pwd']);
+		            $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		            $connection->exec("SET search_path TO udemy_automation");
+		        }
+		        else {
+					$dbopts = parse_url(getenv('DATABASE_URL'));
+			        $db_host = $dbopts['host'];
+			        $db = ltrim($dbopts['path'],'/');
+			        $connection = new PDO("pgsql:host=$db_host;port=5432;dbname=$db", $dbopts['user'], $dbopts['pass']);
+			        $connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		        }
 
 		          $ps = $connection->prepare("INSERT INTO users (username, password, create_date) VALUES (:username, :password, :create_date)");
 		          $ps->bindParam(':username', $username);
